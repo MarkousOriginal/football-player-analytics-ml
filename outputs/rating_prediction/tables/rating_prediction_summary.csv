@@ -1,0 +1,5 @@
+﻿Position,Players,Perf_features,Full_features,R2_perf_only,R2_full,R2_gap_from_attrs,MAE_perf_only,MAE_full
+Attacker,3681,7,12,0.496,0.863,0.366,3.129,1.604
+Midfielder,4314,7,12,0.445,0.826,0.381,3.41,1.864
+Defender,2972,7,12,0.479,0.92,0.441,3.425,1.294
+Goalkeeper,1162,7,12,0.484,0.981,0.497,3.61,0.706

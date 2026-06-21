@@ -366,6 +366,16 @@ def plot_feature_importance(
     return importance_df
 
 
+def evaluate_model(X_train, X_test, y_train, y_test):
+    model = build_model()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = float(np.sqrt(mean_squared_error(y_test, y_pred)))
+    r2 = r2_score(y_test, y_pred)
+    return model, y_pred, mae, rmse, r2
+
+
 def train_group_model(data: pd.DataFrame, group: str) -> Dict[str, float] | None:
     group_data = data[data["position_group"] == group].copy()
 
@@ -373,93 +383,96 @@ def train_group_model(data: pd.DataFrame, group: str) -> Dict[str, float] | None
         print(f"Skipping {group}: only {len(group_data)} matched players.")
         return None
 
-    features = BASE_FEATURES + FEATURES_BY_POSITION[group]
+    # performance-only vs full feature sets (intersected with what's available)
+    perf_features = [f for f in BASE_FEATURES if f in group_data.columns]
+    attr_features = [f for f in FEATURES_BY_POSITION[group] if f in group_data.columns]
+    full_features = perf_features + attr_features
 
-    available = [feature for feature in features if feature in group_data.columns]
-    missing = sorted(set(features) - set(available))
-
-    if missing:
-        print(f"{group} missing features ignored: {missing}")
-
-    if len(available) < 4:
+    if len(perf_features) < 2:
+        print(f"Skipping {group}: not enough performance features.")
+        return None
+    if len(full_features) < 4:
         print(f"Skipping {group}: not enough usable features.")
         return None
 
-    X = group_data[available].apply(pd.to_numeric, errors="coerce").replace([np.inf, -np.inf], np.nan).fillna(0)
-    y = pd.to_numeric(group_data["fifa_overall"], errors="coerce")
+    # keep only validly-labelled players
+    y_all = pd.to_numeric(group_data["fifa_overall"], errors="coerce")
+    group_data = group_data.loc[y_all.notna()].copy()
+    y_all = y_all.loc[group_data.index]
 
-    valid_mask = y.notna()
-    X = X.loc[valid_mask]
-    y = y.loc[valid_mask]
-
-    if len(X) < MIN_PLAYERS_PER_GROUP:
-        print(f"Skipping {group}: only {len(X)} valid labelled players.")
+    if len(group_data) < MIN_PLAYERS_PER_GROUP:
+        print(f"Skipping {group}: only {len(group_data)} valid labelled players.")
         return None
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_STATE,
+    # ONE shared split so both models are judged on the SAME test players
+    train_idx, test_idx = train_test_split(
+        group_data.index, test_size=TEST_SIZE, random_state=RANDOM_STATE
     )
 
-    model = build_model()
-    model.fit(X_train, y_train)
+    def matrix(cols, idx):
+        return (
+            group_data.loc[idx, cols]
+            .apply(pd.to_numeric, errors="coerce")
+            .replace([np.inf, -np.inf], np.nan)
+            .fillna(0)
+        )
 
-    y_pred = model.predict(X_test)
+    y_train = y_all.loc[train_idx]
+    y_test = y_all.loc[test_idx]
 
-    mae = mean_absolute_error(y_test, y_pred)
-    rmse = float(np.sqrt(mean_squared_error(y_test, y_pred)))
-    r2 = r2_score(y_test, y_pred)
+    runs = {"performance_only": perf_features, "full": full_features}
+    metrics = {}
 
-    print(f"\nPosition: {group}")
-    print(f"  Players: {len(X)}")
-    print(f"  MAE: {mae:.2f}")
-    print(f"  RMSE: {rmse:.2f}")
-    print(f"  R²: {r2:.2f}")
+    for label, cols in runs.items():
+        X_train = matrix(cols, train_idx)
+        X_test = matrix(cols, test_idx)
 
-    plot_actual_vs_predicted(
-        y_test=y_test,
-        y_pred=y_pred,
-        group=group,
-        r2=r2,
-        output_path=PLOTS_DIR / f"{group.lower()}_actual_vs_predicted.png",
-    )
+        model, y_pred, mae, rmse, r2 = evaluate_model(X_train, X_test, y_train, y_test)
+        metrics[label] = {"mae": mae, "rmse": rmse, "r2": r2}
 
-    importance_df = plot_feature_importance(
-        model=model,
-        features=available,
-        group=group,
-        output_path=PLOTS_DIR / f"{group.lower()}_feature_importance.png",
-    )
+        plot_actual_vs_predicted(
+            y_test=y_test, y_pred=y_pred,
+            group=f"{group} ({label.replace('_', ' ')})", r2=r2,
+            output_path=PLOTS_DIR / f"{group.lower()}_{label}_actual_vs_predicted.png",
+        )
 
-    importance_df.to_csv(
-        TABLES_DIR / f"{group.lower()}_feature_importance.csv",
-        index=False,
-        encoding="utf-8-sig",
-    )
+        pd.DataFrame(
+            {"actual": y_test, "predicted": y_pred, "error": y_pred - y_test}
+        ).to_csv(
+            TABLES_DIR / f"{group.lower()}_{label}_predictions.csv",
+            index=False, encoding="utf-8-sig",
+        )
 
-    predictions_df = pd.DataFrame(
-        {
-            "actual": y_test,
-            "predicted": y_pred,
-            "error": y_pred - y_test,
-        }
-    )
+        # feature importance only for the full model — shows attribute dominance
+        if label == "full":
+            importance_df = plot_feature_importance(
+                model=model, features=cols, group=group,
+                output_path=PLOTS_DIR / f"{group.lower()}_feature_importance.png",
+            )
+            importance_df.to_csv(
+                TABLES_DIR / f"{group.lower()}_feature_importance.csv",
+                index=False, encoding="utf-8-sig",
+            )
 
-    predictions_df.to_csv(
-        TABLES_DIR / f"{group.lower()}_predictions.csv",
-        index=False,
-        encoding="utf-8-sig",
-    )
+    r2_perf = metrics["performance_only"]["r2"]
+    r2_full = metrics["full"]["r2"]
+    r2_gap = r2_full - r2_perf
+
+    print(f"\nPosition: {group}  (n={len(group_data)})")
+    print(f"  Performance-only : R²={r2_perf:.2f} | MAE={metrics['performance_only']['mae']:.2f}")
+    print(f"  Full (+FIFA attr): R²={r2_full:.2f} | MAE={metrics['full']['mae']:.2f}")
+    print(f"  ΔR² from FIFA attributes: {r2_gap:+.2f}")
 
     return {
         "Position": group,
-        "Players": len(X),
-        "Features": len(available),
-        "MAE": round(float(mae), 3),
-        "RMSE": round(float(rmse), 3),
-        "R2": round(float(r2), 3),
+        "Players": len(group_data),
+        "Perf_features": len(perf_features),
+        "Full_features": len(full_features),
+        "R2_perf_only": round(float(r2_perf), 3),
+        "R2_full": round(float(r2_full), 3),
+        "R2_gap_from_attrs": round(float(r2_gap), 3),
+        "MAE_perf_only": round(float(metrics["performance_only"]["mae"]), 3),
+        "MAE_full": round(float(metrics["full"]["mae"]), 3),
     }
 
 
