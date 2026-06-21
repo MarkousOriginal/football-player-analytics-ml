@@ -289,15 +289,6 @@ The rating-prediction module predicts FIFA overall ratings using a mixture of re
 
 ---
 
-## Suggested CV Description
-
-```text
-Football Analytics & Scouting Models | Python, XGBoost, KMeans, PCA, Pandas
-Built football analytics models for player rating prediction and role-based scouting; trained position-specific XGBoost models and developed KMeans/PCA clustering to identify player archetypes for scouting analysis.
-```
-
----
-
 ## Tech Stack
 
 - Python
