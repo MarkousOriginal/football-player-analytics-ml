@@ -23,7 +23,6 @@ The repository contains two complementary machine learning workflows:
 - XGBoost regression models for FIFA overall prediction
 - Actual vs predicted plots
 - Feature-importance analysis
-- Clean GitHub-ready project structure
 
 ---
 
@@ -209,10 +208,10 @@ From the project root, run:
 python -m pip install -r requirements.txt
 ```
 
-If you are using Anaconda on Windows and `python` is not recognized, run with your full Python path, for example:
+If `python` is not recognized (e.g. Anaconda on Windows), use the full path to your Python executable, for example:
 
 ```powershell
-& "C:\Users\pante\anaconda3\python.exe" -m pip install -r requirements.txt
+C:\Users\<your-username>\anaconda3\python.exe -m pip install -r requirements.txt
 ```
 
 ---
@@ -237,11 +236,11 @@ python run_rating_prediction.py
 python run_all.py
 ```
 
-For Anaconda on Windows:
+If `python` is not recognized (e.g. Anaconda on Windows), use the full path to your Python executable, for example:
 
 ```powershell
-& "C:\Users\pante\anaconda3\python.exe" run_scouting.py
-& "C:\Users\pante\anaconda3\python.exe" run_rating_prediction.py
+C:\Users\<your-username>\anaconda3\python.exe run_scouting.py
+C:\Users\<your-username>\anaconda3\python.exe run_rating_prediction.py
 ```
 
 ---
@@ -283,9 +282,24 @@ Examples:
 
 ## Methodology Notes
 
-The scouting module is exploratory. KMeans clusters should be interpreted as **player archetypes**, not exact player classifications.
+**Scouting module.** This module is exploratory. The role archetypes are defined by
+hand-crafted feature weights (`ROLE_PROFILES`), and KMeans clusters are then mapped onto
+them. Results should be read as **player archetypes**, not exact classifications, and the
+clustering is validated only descriptively (silhouette scores), since there is no ground
+truth for "role".
 
-The rating-prediction module predicts FIFA overall ratings using a mixture of real player performance data and FIFA attribute data. Because FIFA attributes are related to the target variable, the model should be interpreted as a rating-modelling exercise rather than a pure performance-only scouting model.
+**Rating-prediction module — important caveat.** This module predicts FIFA *overall* from
+a mix of real-world performance data and FIFA *technical attributes* (e.g. shooting,
+passing, defending). FIFA overall is itself derived by EA from those technical attributes,
+so a model that includes them is partly **reconstructing a known rating formula** — high
+accuracy here reflects that built-in relationship rather than genuine predictive insight.
+The results are therefore best read as a **rating-modelling and feature-importance
+exercise**, not as evidence that on-pitch performance predicts ratings.
+
+A stricter, more informative variant would predict overall from **performance features
+only** (no FIFA attributes); the gap between the two is the part that actually measures how
+much real performance explains the rating. That ablation is the natural next step for this
+module.
 
 ---
 
