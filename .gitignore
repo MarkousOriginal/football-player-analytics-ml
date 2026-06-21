@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+
+# Virtual environments
+.env
+.venv/
+venv/
+
+# Raw datasets are ignored by default because of licensing / size.
+data/**/*.csv
+data/**/*.xlsx
+data/**/*.parquet
+
+# Keep generated plots and tables visible in GitHub unless you choose otherwise.

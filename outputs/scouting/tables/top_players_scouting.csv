@@ -1,0 +1,61 @@
+﻿Player,Position,Role,Score,RawScore,Cluster
+Manuel Riemann,Goalkeeper,Modern Sweeper Keeper,100.0,5.223070325619246,0
+Koen Casteels,Goalkeeper,Modern Sweeper Keeper,77.79,4.4660840002872035,0
+Yann Sommer,Goalkeeper,Modern Sweeper Keeper,73.2,4.30987492435604,0
+Andrea Consigli,Goalkeeper,Modern Sweeper Keeper,56.86,3.752688463799604,0
+David Raya,Goalkeeper,Modern Sweeper Keeper,56.77,3.7497443778943587,0
+Jordi Masip,Goalkeeper,Shot Stopper Specialist,100.0,3.3918510707332903,1
+Bernd Leno,Goalkeeper,Shot Stopper Specialist,89.71,3.0652135567223175,1
+Luigi Sepe,Goalkeeper,Shot Stopper Specialist,89.47,3.057560910860716,1
+Robin Zentner,Goalkeeper,Shot Stopper Specialist,88.78,3.035671936758893,1
+Mark Travers,Goalkeeper,Shot Stopper Specialist,81.71,2.81105126541207,1
+Neco Williams,Defender,Aggressive Ball Winner,100.0,5.101426123910486,2
+Davide Calabria,Defender,Aggressive Ball Winner,99.65,5.091218351633973,2
+Lucas Martínez Quarta,Defender,Aggressive Ball Winner,87.97,4.746366633408589,2
+Vanderson,Defender,Aggressive Ball Winner,87.14,4.72185929249205,2
+Melvin Bard,Defender,Aggressive Ball Winner,85.99,4.687903574505421,2
+Koffi Djidji,Defender,Balanced Defender,100.0,2.460053052158474,1
+Marlon,Defender,Balanced Defender,97.34,2.4096029248297253,1
+Óscar Mingueza,Defender,Balanced Defender,96.24,2.388636414349556,1
+Diego Rico,Defender,Balanced Defender,96.23,2.3884949830693274,1
+Álex Moreno,Defender,Balanced Defender,95.96,2.383443574422042,1
+Ardian Ismajli,Defender,Defensive Destroyer,100.0,4.830107329370588,0
+James Tarkowski,Defender,Defensive Destroyer,99.76,4.820362971778793,0
+Max Kilman,Defender,Defensive Destroyer,96.84,4.6997178144268315,0
+Lisandro Martínez,Defender,Defensive Destroyer,93.56,4.564304615759921,0
+Chris Mepham,Defender,Defensive Destroyer,87.94,4.332150243271154,0
+Kevin De Bruyne,Midfielder,Creative Deep Playmaker,100.0,6.000273259604972,1
+Toni Kroos,Midfielder,Creative Deep Playmaker,79.43,5.038467611730986,1
+Branco van den Boomen,Midfielder,Creative Deep Playmaker,62.44,4.244194450280986,1
+Luis Alberto,Midfielder,Creative Deep Playmaker,59.55,4.108744870413861,1
+Joshua Kimmich,Midfielder,Creative Deep Playmaker,58.0,4.0363107595399645,1
+Muhammed Saracevic Cham,Midfielder,Defensive/Box-to-Box Mid,100.0,2.8911571320038445,0
+Saša Luki?,Midfielder,Defensive/Box-to-Box Mid,97.91,2.840097596261477,0
+Ellyes Skhiri,Midfielder,Defensive/Box-to-Box Mid,97.04,2.8187336032556045,0
+Kike Pérez,Midfielder,Defensive/Box-to-Box Mid,94.3,2.751848821544338,0
+Kouadio Koné,Midfielder,Defensive/Box-to-Box Mid,94.21,2.749529785385546,0
+Robert Lewandowski,Attacker,Complete Striker,100.0,3.8086418637407715,3
+Darwin Núñez,Attacker,Complete Striker,81.05,3.448681286609329,3
+Victor Osimhen,Attacker,Complete Striker,63.52,3.1156246811842294,3
+Gabriel Jesus,Attacker,Complete Striker,56.04,2.9735126062947717,3
+Lautaro Martínez,Attacker,Complete Striker,55.84,2.969689306549993,3
+Ousmane Dembélé,Attacker,Creative Winger,100.0,4.900350613394183,4
+Gerard Deulofeu,Attacker,Creative Winger,98.12,4.851491119427434,4
+Raphinha,Attacker,Creative Winger,94.25,4.7506641147506565,4
+Alassane Pléa,Attacker,Creative Winger,82.66,4.448645650733936,4
+Jonathan Bamba,Attacker,Creative Winger,65.34,3.997769904904093,4
+Erling Haaland,Attacker,Elite Poacher,100.0,5.329604319050484,1
+Wissam Ben Yedder,Attacker,Elite Poacher,81.27,4.667878094415342,1
+Harry Kane,Attacker,Elite Poacher,51.66,3.6218170045280815,1
+Folarin Balogun,Attacker,Elite Poacher,50.68,3.5872447805673033,1
+Kylian Mbappé,Attacker,Elite Poacher,49.81,3.5565185725525117,1
+Kieffer Moore,Attacker,Inactive/Unknown Role,100.0,-0.703658551978098,2
+Assan Ceesay,Attacker,Inactive/Unknown Role,99.44,-0.7116806394511551,2
+Steffen Tigges,Attacker,Inactive/Unknown Role,88.32,-0.8708669856433837,2
+Borja Mayoral,Attacker,Inactive/Unknown Role,85.63,-0.909348019783366,2
+Beto,Attacker,Inactive/Unknown Role,77.0,-1.032811908264593,2
+Francesco Caputo,Attacker,Low Impact Forward,100.0,-0.1747912293486148,0
+Islam Slimani,Attacker,Low Impact Forward,90.82,-0.30472178286399076,0
+Thomas Henry,Attacker,Low Impact Forward,89.61,-0.32185059114164133,0
+Anthony Lozano,Attacker,Low Impact Forward,81.0,-0.4436888911345527,0
+Wilfried Kanga,Attacker,Low Impact Forward,79.84,-0.46010594244279335,0
